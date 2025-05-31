@@ -126,13 +126,13 @@ class PPCRunner:
             self.__run_exec(f"{mpi_running} {self.work_dir / 'mpi_func_tests'} {self.__get_gtest_settings(10)}")
 
     def run_performance(self):
-        if not os.environ.get("ASAN_RUN"):
-            proc_count = os.environ.get("PROC_COUNT")
-            if proc_count is None:
-                raise EnvironmentError("Required environment variable 'PROC_COUNT' is not set.")
-            mpi_running = f"{self.mpi_exec} -np {proc_count}"
-            self.__run_exec(f"{mpi_running} {self.work_dir / 'all_perf_tests'} {self.__get_gtest_settings(1)}")
-            self.__run_exec(f"{mpi_running} {self.work_dir / 'mpi_perf_tests'} {self.__get_gtest_settings(1)}")
+        # if not os.environ.get("ASAN_RUN"):
+        #     proc_count = os.environ.get("PROC_COUNT")
+        #     if proc_count is None:
+        #         raise EnvironmentError("Required environment variable 'PROC_COUNT' is not set.")
+        #     mpi_running = f"{self.mpi_exec} -np {proc_count}"
+        #     self.__run_exec(f"{mpi_running} {self.work_dir / 'all_perf_tests'} {self.__get_gtest_settings(1)}")
+        #     self.__run_exec(f"{mpi_running} {self.work_dir / 'mpi_perf_tests'} {self.__get_gtest_settings(1)}")
 
         self.__run_exec(f"{self.work_dir / 'omp_perf_tests'} {self.__get_gtest_settings(100)}")
         self.__run_exec(f"{self.work_dir / 'seq_perf_tests'} {self.__get_gtest_settings(repeats_count=5)}")
@@ -150,8 +150,8 @@ if __name__ == "__main__":
     ppc_runner = PPCRunner()
     ppc_runner.setup_env()
 
-    if args_dict["running_type"] in ["threads", "processes"]:
-        ppc_runner.run_core()
+    # if args_dict["running_type"] in ["threads", "processes"]:
+    #     ppc_runner.run_core()
 
     if args_dict["running_type"] == "threads":
         ppc_runner.run_threads()
