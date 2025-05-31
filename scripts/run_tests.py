@@ -51,7 +51,7 @@ class PPCRunner:
     def __source_script(script_path):
         if platform.system() == "Windows":
             return
-        command = f"bash -c 'source {script_path} && env'"
+        command = "bash -c 'env'"
         result = subprocess.run(command, stdout=subprocess.PIPE, shell=True, text=True)
         if result.returncode == 0:
             # Parse the output environment variables
