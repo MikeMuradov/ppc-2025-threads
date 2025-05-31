@@ -23,7 +23,7 @@ class RectIntTaskOmp : public ppc::core::Task {
 
  private:
   Matfun fun_;
-  int grains_;
+  std::size_t grains_;
   std::vector<std::pair<double, double>> bounds_;
   double res_;
 };

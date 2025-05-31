@@ -18,7 +18,7 @@ bool muradov_m_rect_int_tbb::RectIntTaskTBBPar::ValidationImpl() {
 }
 
 bool muradov_m_rect_int_tbb::RectIntTaskTBBPar::PreProcessingImpl() {
-  auto* p_grains = reinterpret_cast<int*>(task_data->inputs[0]);
+  auto* p_grains = reinterpret_cast<std::size_t*>(task_data->inputs[0]);
   grains_ = *p_grains;
 
   auto* p_bounds = reinterpret_cast<std::pair<double, double>*>(task_data->inputs[1]);
