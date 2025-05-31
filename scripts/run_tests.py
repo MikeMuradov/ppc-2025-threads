@@ -45,6 +45,7 @@ class PPCRunner:
             self.work_dir = Path(self.__get_project_path()) / "install" / "bin"
         else:
             self.work_dir = Path(self.__get_project_path()) / "build" / "bin"
+        os.environ['LD_LIBRARY_PATH'] = (Path(self.__get_project_path()) / "install" / "lib").as_posix()
 
     @staticmethod
     def __run_exec(command):
