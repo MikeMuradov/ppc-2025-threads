@@ -30,13 +30,6 @@ class PPCRunner:
         self.valgrind_cmd = "valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all"
 
         if platform.system() == "Windows":
-            self.ocv_script_name = "setup_vars_opencv4.cmd"
-            self.ocv_script_path = Path("build/ppc_opencv/install/") / self.ocv_script_name
-        else:
-            self.ocv_script_name = "setup_vars_opencv4.sh"
-            self.ocv_script_path = Path("build/ppc_opencv/install/bin/") / self.ocv_script_name
-
-        if platform.system() == "Windows":
             self.mpi_exec = "mpiexec"
         else:
             self.mpi_exec = "mpirun"
@@ -47,35 +40,11 @@ class PPCRunner:
         script_dir = script_path.parent  # Directory containing the script
         return script_dir.parent
 
-    @staticmethod
-    def __source_script(script_path):
-        if platform.system() == "Windows":
-            return
-        command = "bash -c 'env'"
-        result = subprocess.run(command, stdout=subprocess.PIPE, shell=True, text=True)
-        if result.returncode == 0:
-            # Parse the output environment variables
-            env_vars = {}
-            for line in result.stdout.splitlines():
-                if '=' in line:
-                    key, value = line.split("=", 1)
-                    env_vars[key] = value
-            return env_vars
-        else:
-            print(f"Failed to source script: {script_path}")
-            return {}
-
     def setup_env(self):
-        if os.path.isfile(Path(self.__get_project_path()) / self.ocv_script_path):
-            _work_dir = Path(self.__get_project_path()) / "build/bin"
-            env_vars = self.__source_script(Path(self.__get_project_path()) / self.ocv_script_path)
+        if (Path(self.__get_project_path()) / "install").exists():
+            self.work_dir = Path(self.__get_project_path()) / "install" / "bin"
         else:
-            _work_dir = Path(self.__get_project_path()) / "install/bin"
-            env_vars = self.__source_script(Path(_work_dir) / self.ocv_script_name)
-
-        self.work_dir = Path(_work_dir)
-        if not platform.system() == "Windows":
-            os.environ.update(env_vars)
+            self.work_dir = Path(self.__get_project_path()) / "build" / "bin"
 
     @staticmethod
     def __run_exec(command):
