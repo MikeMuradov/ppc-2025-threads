@@ -1,10 +1,10 @@
 message(STATUS "Student's tasks")
 
-if (USE_MPI)
-    list(APPEND LIST_OF_TASKS "mpi")
-else ()
-    message(WARNING "MPI tasks not build!")
-endif ()
+# if (USE_MPI)
+#     list(APPEND LIST_OF_TASKS "mpi")
+# else ()
+#     message(WARNING "MPI tasks not build!")
+# endif ()
 
 if (USE_OMP)
     list(APPEND LIST_OF_TASKS "omp")
@@ -30,11 +30,11 @@ else ()
     message(WARNING "TBB tasks not build!")
 endif ()
 
-if (USE_MPI AND USE_OMP AND USE_SEQ AND USE_STL AND USE_TBB)
-    list(APPEND LIST_OF_TASKS "all")
-else ()
-    message(WARNING "ALL tasks not build!")
-endif ()
+# if (USE_MPI AND USE_OMP AND USE_SEQ AND USE_STL AND USE_TBB)
+#     list(APPEND LIST_OF_TASKS "all")
+# else ()
+#     message(WARNING "ALL tasks not build!")
+# endif ()
 
 add_compile_definitions(PATH_TO_PPC_PROJECT="${CMAKE_SOURCE_DIR}")
 
@@ -106,11 +106,11 @@ foreach(TASK_TYPE ${LIST_OF_TASKS})
           endif( MPI_LINK_FLAGS )
           target_link_libraries(${EXEC_FUNC} PUBLIC ${MPI_LIBRARIES})
 
-          add_dependencies(${EXEC_FUNC} ppc_boost)
-          target_link_directories(${EXEC_FUNC} PUBLIC ${CMAKE_BINARY_DIR}/ppc_boost/install/lib)
-          if (NOT MSVC)
-              target_link_libraries(${EXEC_FUNC} PUBLIC boost_mpi boost_serialization)
-          endif ()
+        #   add_dependencies(${EXEC_FUNC} ppc_boost)
+        #   target_link_directories(${EXEC_FUNC} PUBLIC ${CMAKE_BINARY_DIR}/ppc_boost/install/lib)
+        #   if (NOT MSVC)
+        #       target_link_libraries(${EXEC_FUNC} PUBLIC boost_mpi boost_serialization)
+        #   endif ()
       elseif ("${MODULE_NAME}" STREQUAL "tbb")
           add_dependencies(${EXEC_FUNC} ppc_onetbb)
           target_link_directories(${EXEC_FUNC} PUBLIC ${CMAKE_BINARY_DIR}/ppc_onetbb/install/lib)
@@ -129,11 +129,11 @@ foreach(TASK_TYPE ${LIST_OF_TASKS})
           endif( MPI_LINK_FLAGS )
           target_link_libraries(${EXEC_FUNC} PUBLIC ${MPI_LIBRARIES})
 
-          add_dependencies(${EXEC_FUNC} ppc_boost)
-          target_link_directories(${EXEC_FUNC} PUBLIC ${CMAKE_BINARY_DIR}/ppc_boost/install/lib)
-          if (NOT MSVC)
-              target_link_libraries(${EXEC_FUNC} PUBLIC boost_mpi boost_serialization)
-          endif ()
+        #   add_dependencies(${EXEC_FUNC} ppc_boost)
+        #   target_link_directories(${EXEC_FUNC} PUBLIC ${CMAKE_BINARY_DIR}/ppc_boost/install/lib)
+        #   if (NOT MSVC)
+        #       target_link_libraries(${EXEC_FUNC} PUBLIC boost_mpi boost_serialization)
+        #   endif ()
 
           add_dependencies(${EXEC_FUNC} ppc_onetbb)
           target_link_directories(${EXEC_FUNC} PUBLIC ${CMAKE_BINARY_DIR}/ppc_onetbb/install/lib)
@@ -142,27 +142,27 @@ foreach(TASK_TYPE ${LIST_OF_TASKS})
           endif()
       endif ()
 
-      add_dependencies(${EXEC_FUNC} ppc_opencv)
-      if(WIN32)
-          target_include_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/install/include")
-      else()
-          target_include_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/install/include/opencv4")
-      endif()
+    #   add_dependencies(${EXEC_FUNC} ppc_opencv)
+    #   if(WIN32)
+    #       target_include_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/install/include")
+    #   else()
+    #       target_include_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/install/include/opencv4")
+    #   endif()
 
 
-      if(WIN32)
-          target_link_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/build/lib")
-          set(OCV_VERSION "4110")
-      else()
-          target_link_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/install/lib")
-      endif()
+    #   if(WIN32)
+    #       target_link_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/build/lib")
+    #       set(OCV_VERSION "4110")
+    #   else()
+    #       target_link_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_opencv/install/lib")
+    #   endif()
 
-      target_link_libraries(${EXEC_FUNC} PUBLIC
-              opencv_core${OCV_VERSION}
-              opencv_highgui${OCV_VERSION}
-              opencv_imgcodecs${OCV_VERSION}
-              opencv_imgproc${OCV_VERSION}
-              opencv_videoio${OCV_VERSION})
+    #   target_link_libraries(${EXEC_FUNC} PUBLIC
+    #           opencv_core${OCV_VERSION}
+    #           opencv_highgui${OCV_VERSION}
+    #           opencv_imgcodecs${OCV_VERSION}
+    #           opencv_imgproc${OCV_VERSION}
+    #           opencv_videoio${OCV_VERSION})
 
       add_dependencies(${EXEC_FUNC} ppc_googletest)
       target_link_directories(${EXEC_FUNC} PUBLIC "${CMAKE_BINARY_DIR}/ppc_googletest/install/lib")
