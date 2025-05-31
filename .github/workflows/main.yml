@@ -42,7 +42,7 @@ jobs:
       - name: Setup environment
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y gcc-14 g++-14 ninja-build libmpich-dev libomp-dev valgrind
+          sudo apt-get install --no-install-recommends -y gcc-14 g++-14 ninja-build libmpich-dev libomp-dev
           python3 -m pip install -r requirements.txt
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2

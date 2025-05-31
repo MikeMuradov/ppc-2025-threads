@@ -140,7 +140,7 @@ class PPCRunner:
         self.__run_exec(f"{self.work_dir / 'tbb_perf_tests'} {self.__get_gtest_settings(100)}")
 
     def run_performance_list(self):
-        for task_type in ["all", "mpi", "omp", "seq", "stl", "tbb"]:
+        for task_type in ["omp", "seq", "stl", "tbb"]:
             self.__run_exec(f"{self.work_dir / f'{task_type}_perf_tests'} --gtest_list_tests")
 
 
