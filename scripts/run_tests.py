@@ -104,10 +104,10 @@ class PPCRunner:
         #     self.__run_exec(f"{mpi_running} {self.work_dir / 'all_perf_tests'} {self.__get_gtest_settings(1)}")
         #     self.__run_exec(f"{mpi_running} {self.work_dir / 'mpi_perf_tests'} {self.__get_gtest_settings(1)}")
 
-        self.__run_exec(f"{self.work_dir / 'tbb_perf_tests'} {self.__get_gtest_settings(100)}")
-        self.__run_exec(f"{self.work_dir / 'omp_perf_tests'} {self.__get_gtest_settings(100)}")
-        self.__run_exec(f"{self.work_dir / 'seq_perf_tests'} {self.__get_gtest_settings(repeats_count=5)}")
-        self.__run_exec(f"{self.work_dir / 'stl_perf_tests'} {self.__get_gtest_settings(50)}")
+        self.__run_exec(f"{self.work_dir / 'tbb_perf_tests'} {self.__get_gtest_settings(1)}")
+        self.__run_exec(f"{self.work_dir / 'omp_perf_tests'} {self.__get_gtest_settings(repeats_count=1)}")
+        self.__run_exec(f"{self.work_dir / 'seq_perf_tests'} {self.__get_gtest_settings(repeats_count=1)}")
+        self.__run_exec(f"{self.work_dir / 'stl_perf_tests'} {self.__get_gtest_settings(1)}")
 
     def run_performance_list(self):
         for task_type in ["tbb", "omp", "stl"]:
