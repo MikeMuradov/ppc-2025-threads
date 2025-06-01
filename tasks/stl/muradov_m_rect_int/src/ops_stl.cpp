@@ -1,4 +1,4 @@
-#include "stl/muradov_m_rect_int/include/ops_stl.hpp"
+#include "stl/Muradov_m_rect_int/include/ops_stl.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -14,7 +14,7 @@ bool muradov_m_rect_int_stl::RectIntTaskSTLPar::ValidationImpl() {
 }
 
 bool muradov_m_rect_int_stl::RectIntTaskSTLPar::PreProcessingImpl() {
-  auto* p_grains = reinterpret_cast<std::size_t*>(task_data->inputs[0]);
+  auto* p_grains = reinterpret_cast<int*>(task_data->inputs[0]);
   grains_ = *p_grains;
 
   auto* p_bounds = reinterpret_cast<std::pair<double, double>*>(task_data->inputs[1]);
@@ -29,8 +29,10 @@ bool muradov_m_rect_int_stl::RectIntTaskSTLPar::RunImpl() {
   const auto dims = static_cast<std::size_t>(bounds_.size());
 
   double hh = 1.0;
+  std::vector<double> precomp(dims);
   for (std::size_t i = 0; i < dims; i++) {
     hh *= (bounds_[i].second - bounds_[i].first) / grains_;
+    precomp[i] = (bounds_[i].second - bounds_[i].first) / grains_;
   }
   int pts = static_cast<int>(std::pow(grains_, dims));
 
@@ -52,7 +54,7 @@ bool muradov_m_rect_int_stl::RectIntTaskSTLPar::RunImpl() {
             auto j = i;
             for (size_t k = 0; k < dims; k++) {
               args[k] = bounds_[k].first;
-              args[k] += (j % grains_) * (bounds_[k].second - bounds_[k].first) / grains_;
+              args[k] += (j % grains_) * precomp[k];
               j /= grains_;
             }
             sum += fun_(args);

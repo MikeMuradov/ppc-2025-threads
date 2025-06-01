@@ -1,4 +1,4 @@
-#include "tbb/muradov_m_rect_int/include/ops_tbb.hpp"
+#include "tbb/Muradov_m_rect_int/include/ops_tbb.hpp"
 
 #include <oneapi/tbb/task_arena.h>
 #include <tbb/tbb.h>
@@ -18,7 +18,7 @@ bool muradov_m_rect_int_tbb::RectIntTaskTBBPar::ValidationImpl() {
 }
 
 bool muradov_m_rect_int_tbb::RectIntTaskTBBPar::PreProcessingImpl() {
-  auto* p_grains = reinterpret_cast<std::size_t*>(task_data->inputs[0]);
+  auto* p_grains = reinterpret_cast<int*>(task_data->inputs[0]);
   grains_ = *p_grains;
 
   auto* p_bounds = reinterpret_cast<std::pair<double, double>*>(task_data->inputs[1]);
@@ -33,22 +33,24 @@ bool muradov_m_rect_int_tbb::RectIntTaskTBBPar::RunImpl() {
   const auto dims = static_cast<std::size_t>(bounds_.size());
 
   double hh = 1.0;
+  std::vector<double> precomp(dims);
   for (std::size_t i = 0; i < dims; i++) {
     hh *= (bounds_[i].second - bounds_[i].first) / grains_;
+    precomp[i] = (bounds_[i].second - bounds_[i].first) / grains_;
   }
   int pts = static_cast<int>(std::pow(grains_, dims));
 
   oneapi::tbb::task_arena arena(ppc::util::GetPPCNumThreads());
   res_ = arena.execute([&] {
     return oneapi::tbb::parallel_reduce(
-        oneapi::tbb::blocked_range(0, pts, pts / 2 / arena.max_concurrency()), 0.0,
+        oneapi::tbb::blocked_range(0, pts, pts / arena.max_concurrency()), 0.0,
         [&](const tbb::blocked_range<int>& rng, double s) {
           FunArgs args(dims);
           for (int i = rng.begin(); i < rng.end(); i++) {
             auto j = i;
             for (size_t k = 0; k < dims; k++) {
               args[k] = bounds_[k].first;
-              args[k] += (j % grains_) * (bounds_[k].second - bounds_[k].first) / grains_;
+              args[k] += (j % grains_) * precomp[k];
               j /= grains_;
             }
             s += fun_(args);
